@@ -3,12 +3,10 @@ package eu.taxify.mock.controller;
 import eu.taxify.mock.config.PaystackResponse;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.Objects;
+import java.util.function.Supplier;
 
 @RestController
 public class MockController {
@@ -16,7 +14,7 @@ public class MockController {
   public static final String CUSTOMER_URI = "/customer";
   public static final String TRANSACTION_VERIFY_URI = "/transaction/verify";
   public static final String
-          TRANSACTION_CHARGE_AUTHORIZATION_URI
+                             TRANSACTION_CHARGE_AUTHORIZATION_URI
           = "/transaction/charge_authorization";
   private PaystackResponse paystackResponse;
   private Logger           logger;
@@ -31,38 +29,37 @@ public class MockController {
   }
 
   @PostMapping(TRANSACTION_CHARGE_AUTHORIZATION_URI)
-  public String mockCharge()
+  public String mockCharge(@RequestBody String request)
           throws InterruptedException {
 
 //    Thread.sleep(10000);
-
-    return "[]";
+    return sendResponse(() -> paystackResponse.charge(
+            "AUTH_xnf39jtr",
+            100000,
+            true
+    ), request, TRANSACTION_CHARGE_AUTHORIZATION_URI);
   }
 
   @GetMapping(TRANSACTION_VERIFY_URI + "/{reference}")
   public String mockVerify(@PathVariable String reference)
           throws InterruptedException {
 
-    logger.debug("Processing " + TRANSACTION_VERIFY_URI + " request: { reference: " + reference + " }");
+    String request = "{ reference: " +
+                     reference +
+                     " }";
 //    Thread.sleep(10000);
 
-    String response;
-
-    if (Objects.equals(reference, paystackResponse.VALID_REFERENCE)) {
-      response =
-              paystackResponse.verifySuccessful(paystackResponse.VALID_REFERENCE);
-    } else {
-      response =
-              paystackResponse.verify(
-                      reference,
-                      false,
-                      paystackResponse.insufficientFunds
-              );
-    }
-
-    logger.debug(response);
-
-    return response;
+    return sendResponse(() -> {
+      if (Objects.equals(reference, paystackResponse.VALID_REFERENCE)) {
+        return paystackResponse.verifySuccessful(paystackResponse.VALID_REFERENCE);
+      } else {
+        return paystackResponse.verify(
+                reference,
+                false,
+                paystackResponse.insufficientFunds
+        );
+      }
+    }, request, TRANSACTION_VERIFY_URI);
   }
 
   @GetMapping(CUSTOMER_URI + "/{id}")
@@ -71,12 +68,23 @@ public class MockController {
 
     String request = "{ user_id: " + id + " }";
 
-    logger.debug("Processing uri: " + CUSTOMER_URI + " request: " + request);
-//    Thread.sleep(10000);
+    return sendResponse(() -> {
+      if (Objects.equals(id, paystackResponse.VALID_CUSTOMER_ID)) {
+        return paystackResponse.customer(id, true);
+      } else {
+        return paystackResponse.customer(id, false);
+      }
+    }, request, CUSTOMER_URI);
+  }
 
-    String response;
+  private String sendResponse(
+          Supplier<String> responseSupplier,
+          String request,
+          String uri
+  ) {
+    logger.debug("Processing uri: " + uri + " request: " + request);
 
-    response = paystackResponse.customer(id, true);
+    String response = responseSupplier.get();
 
     logger.debug(response);
 
