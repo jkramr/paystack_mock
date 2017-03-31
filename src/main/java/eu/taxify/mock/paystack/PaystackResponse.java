@@ -1,4 +1,4 @@
-package eu.taxify.mock.config;
+package eu.taxify.mock.paystack;
 
 import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;
@@ -287,5 +287,9 @@ public class PaystackResponse {
            "    \"plan\": 0\n" +
            "  }\n" +
            "}";
+  }
+
+  public String chargeCurrencyNotSupported() {
+    return "{\"status\":false,\"message\":\"Currency not supported by merchant\"}";
   }
 }
