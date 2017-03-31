@@ -13,8 +13,13 @@ import java.util.Objects;
 @RestController
 public class MockController {
 
+  public static final String CUSTOMER_URI = "/customer";
+  public static final String TRANSACTION_VERIFY_URI = "/transaction/verify";
+  public static final String
+          TRANSACTION_CHARGE_AUTHORIZATION_URI
+          = "/transaction/charge_authorization";
   private PaystackResponse paystackResponse;
-  private Logger logger;
+  private Logger           logger;
 
   @Autowired
   public MockController(
@@ -25,7 +30,7 @@ public class MockController {
     this.logger = logger;
   }
 
-  @PostMapping("/transaction/charge_authorization")
+  @PostMapping(TRANSACTION_CHARGE_AUTHORIZATION_URI)
   public String mockCharge()
           throws InterruptedException {
 
@@ -34,29 +39,48 @@ public class MockController {
     return "[]";
   }
 
-  @GetMapping("/transaction/verify/{reference}")
+  @GetMapping(TRANSACTION_VERIFY_URI + "/{reference}")
   public String mockVerify(@PathVariable String reference)
           throws InterruptedException {
 
+    logger.debug("Processing " + TRANSACTION_VERIFY_URI + " request: { reference: " + reference + " }");
 //    Thread.sleep(10000);
 
+    String response;
+
     if (Objects.equals(reference, paystackResponse.VALID_REFERENCE)) {
-      return paystackResponse.verifySuccessful(paystackResponse.VALID_REFERENCE);
+      response =
+              paystackResponse.verifySuccessful(paystackResponse.VALID_REFERENCE);
     } else {
-      return paystackResponse.verify(
-              reference,
-              false,
-              paystackResponse.insufficientFunds
-      );
+      response =
+              paystackResponse.verify(
+                      reference,
+                      false,
+                      paystackResponse.insufficientFunds
+              );
     }
+
+    logger.debug(response);
+
+    return response;
   }
 
-  @GetMapping("/customer/{id}")
+  @GetMapping(CUSTOMER_URI + "/{id}")
   public String mockGetCustomer(@PathVariable Integer id)
           throws InterruptedException {
 
+    String request = "{ user_id: " + id + " }";
+
+    logger.debug("Processing uri: " + CUSTOMER_URI + " request: " + request);
 //    Thread.sleep(10000);
 
-    return "[]";
+    String response;
+
+    response = paystackResponse.customer(id, true);
+
+    logger.debug(response);
+
+    return response;
   }
+
 }

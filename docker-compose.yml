@@ -1,9 +1,8 @@
 nginx-ssl-proxy:
-  build: src/main/docker
+  build: src/main/docker/nginx
   container_name: nginx-ssl-proxy
   volumes:
         - /var/run/docker.sock:/tmp/docker.sock:ro
-        - ./certs:/etc/nginx/certs
   ports:
     - "8080:80"
     - "443:443"

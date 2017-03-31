@@ -1,4 +1,4 @@
 FROM nginx
 COPY proxy.conf /etc/nginx/conf.d/default.conf
-COPY certs/myssl.crt /etc/ssl/certs/myssl.crt
-COPY certs/myssl.crt.key /etc/ssl/certs/myssl.crt.key
+COPY certs/cert.pem /etc/ssl/certs/myssl.crt
+COPY certs/privkey.pem /etc/ssl/private/myssl.key

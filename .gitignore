@@ -23,6 +23,7 @@ nbbuild/
 dist/
 nbdist/
 .nb-gradle/
-/src/main/docker/nginx/certs/myssl.crt
-/src/main/docker/nginx/certs/myssl.crt.csr
-/src/main/docker/nginx/certs/myssl.crt.key
+/src/main/docker/godaddy.conf
+*.pem
+*.crt
+*.csr
