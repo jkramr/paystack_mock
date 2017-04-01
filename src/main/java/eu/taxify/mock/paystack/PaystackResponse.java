@@ -146,7 +146,6 @@ public class PaystackResponse {
   public String insufficientFunds;
 
 
-
   public String customer(
           final Integer id,
           boolean success
@@ -241,55 +240,81 @@ public class PaystackResponse {
   public String charge(
           String authorisationCode,
           Integer amount,
-          boolean success
+          boolean acceptRequest,
+          boolean success,
+          String gatewayResponse
   ) {
+
+    String data = acceptRequest ? "  \"data\": {\n" +
+                                  "    \"amount\": " +
+                                  amount +
+                                  ",\n" +
+                                  "    \"currency\": \"NGN\",\n" +
+                                  "    \"transaction_date\": \"2017-03-31T12:05:51.000Z\",\n" +
+                                  "    \"status\": \"" +
+                                  success +
+                                  "\",\n" +
+                                  "    \"reference\": \"action-33b100fa3a77f8445226\",\n" +
+                                  "    \"domain\": \"test\",\n" +
+                                  "    \"metadata\": \"\",\n" +
+                                  "    \"gateway_response\": \"" +
+                                  gatewayResponse +
+                                  "\",\n" +
+                                  "    \"message\": null,\n" +
+                                  "    \"channel\": \"card\",\n" +
+                                  "    \"ip_address\": null,\n" +
+                                  "    \"log\": null,\n" +
+                                  "    \"fees\": 1000,\n" +
+                                  "    \"authorization\": {\n" +
+                                  "      \"authorization_code\": \"" +
+                                  authorisationCode +
+                                  "\",\n" +
+                                  "      \"bin\": \"412345\",\n" +
+                                  "      \"last4\": \"1381\",\n" +
+                                  "      \"exp_month\": \"02\",\n" +
+                                  "      \"exp_year\": \"2020\",\n" +
+                                  "      \"channel\": \"card\",\n" +
+                                  "      \"card_type\": \"visa\",\n" +
+                                  "      \"bank\": \"TEST BANK\",\n" +
+                                  "      \"country_code\": \"NG\",\n" +
+                                  "      \"brand\": \"visa\",\n" +
+                                  "      \"reusable\": true,\n" +
+                                  "      \"signature\": \"SIG_y8PqDaob8DcMVqt9vHJj\"\n" +
+                                  "    },\n" +
+                                  "    \"customer\": {\n" +
+                                  "      \"id\": 189122,\n" +
+                                  "      \"first_name\": \"\",\n" +
+                                  "      \"last_name\": \"\",\n" +
+                                  "      \"email\": \"" +
+                                  GENERATED_EMAIL +
+                                  "\",\n" +
+                                  "      \"customer_code\": \"CUS_mdv4cfk2jehfdfg\",\n" +
+                                  "      \"phone\": \"\",\n" +
+                                  "      \"metadata\": null,\n" +
+                                  "      \"risk_action\": \"default\"\n" +
+                                  "    },\n" +
+                                  "    \"plan\": 0\n" +
+                                  "  }\n"
+                                : "";
+
     return "{\n" +
-           "  \"status\": " + success + ",\n" +
+           "  \"status\": " + acceptRequest + ",\n" +
            "  \"message\": \"Charge attempted\",\n" +
-           "  \"data\": {\n" +
-           "    \"amount\": " + amount + ",\n" +
-           "    \"currency\": \"NGN\",\n" +
-           "    \"transaction_date\": \"2017-03-31T12:05:51.000Z\",\n" +
-           "    \"status\": \"success\",\n" +
-           "    \"reference\": \"action-33b100fa3a77f8445226\",\n" +
-           "    \"domain\": \"test\",\n" +
-           "    \"metadata\": \"\",\n" +
-           "    \"gateway_response\": \"Successful\",\n" +
-           "    \"message\": null,\n" +
-           "    \"channel\": \"card\",\n" +
-           "    \"ip_address\": null,\n" +
-           "    \"log\": null,\n" +
-           "    \"fees\": 1000,\n" +
-           "    \"authorization\": {\n" +
-           "      \"authorization_code\": \"" + authorisationCode + "\",\n" +
-           "      \"bin\": \"412345\",\n" +
-           "      \"last4\": \"1381\",\n" +
-           "      \"exp_month\": \"02\",\n" +
-           "      \"exp_year\": \"2020\",\n" +
-           "      \"channel\": \"card\",\n" +
-           "      \"card_type\": \"visa\",\n" +
-           "      \"bank\": \"TEST BANK\",\n" +
-           "      \"country_code\": \"NG\",\n" +
-           "      \"brand\": \"visa\",\n" +
-           "      \"reusable\": true,\n" +
-           "      \"signature\": \"SIG_y8PqDaob8DcMVqt9vHJj\"\n" +
-           "    },\n" +
-           "    \"customer\": {\n" +
-           "      \"id\": 189122,\n" +
-           "      \"first_name\": \"\",\n" +
-           "      \"last_name\": \"\",\n" +
-           "      \"email\": \"" + GENERATED_EMAIL + "\",\n" +
-           "      \"customer_code\": \"CUS_mdv4cfk2jehfdfg\",\n" +
-           "      \"phone\": \"\",\n" +
-           "      \"metadata\": null,\n" +
-           "      \"risk_action\": \"default\"\n" +
-           "    },\n" +
-           "    \"plan\": 0\n" +
-           "  }\n" +
+           data +
            "}";
   }
 
   public String chargeCurrencyNotSupported() {
     return "{\"status\":false,\"message\":\"Currency not supported by merchant\"}";
+  }
+
+  public String chargeFail() {
+    return charge(
+            VALID_REFERENCE,
+            0,
+            true,
+            false,
+            insufficientFunds
+    );
   }
 }

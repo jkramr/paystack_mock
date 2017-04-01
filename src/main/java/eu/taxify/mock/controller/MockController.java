@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Objects;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Supplier;
 
 @RestController
@@ -21,6 +22,8 @@ public class MockController {
                                                     = "/transaction/charge_authorization";
   private PaystackResponse paystackResponse;
   private Logger           logger;
+
+  private AtomicInteger atomicInteger = new AtomicInteger();
 
   @Autowired
   public MockController(
@@ -35,16 +38,23 @@ public class MockController {
   public String mockCharge(@RequestBody ChargeRequest chargeRequest)
           throws InterruptedException, JsonProcessingException {
 
-//    Thread.sleep(10000);
-
     String jsonRequest = new ObjectMapper().writeValueAsString(chargeRequest);
 
     return sendResponse(() -> {
       if ("NGN".equals(chargeRequest.getCurrency())) {
+
+        int atomic = atomicInteger.incrementAndGet();
+
+        if (atomic == 2) {
+          return paystackResponse.chargeFail();
+        }
+
         return paystackResponse.charge(
                 chargeRequest.getAuthorizationCode(),
                 100000,
-                true
+                true,
+                true,
+                paystackResponse.successful
         );
       } else {
         return paystackResponse.chargeCurrencyNotSupported();
@@ -59,6 +69,7 @@ public class MockController {
     String request = "{ reference: " +
                      reference +
                      " }";
+
 //    Thread.sleep(10000);
 
     return sendResponse(() -> {
