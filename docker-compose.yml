@@ -1,8 +1,16 @@
 nginx-ssl-proxy:
   build: src/main/docker/nginx
   container_name: nginx-ssl-proxy
+#  links:
+#    - payment-mock
   volumes:
         - /var/run/docker.sock:/tmp/docker.sock:ro
   ports:
     - "8080:80"
     - "443:443"
+
+#payment-mock:
+#  image: jkramr/payment:0.0.1-SNAPSHOT
+#  container_name: payment-mock
+#  ports:
+#    - "8089:8089"
