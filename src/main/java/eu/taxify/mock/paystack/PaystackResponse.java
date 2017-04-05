@@ -1,10 +1,8 @@
 package eu.taxify.mock.paystack;
 
 import lombok.Data;
-import org.springframework.boot.context.properties.ConfigurationProperties;
 
 @Data
-@ConfigurationProperties(prefix = "paystack.payment.response")
 public class PaystackResponse {
 
   public static final String  EXAMPLE_AUTHORIZATIONS =
@@ -142,8 +140,8 @@ public class PaystackResponse {
                                              "        \"createdAt\": \"2017-02-06T16:16:47.000Z\"\n" +
                                              "      }\n" +
                                              "    ],\n";
-  public String successful;
-  public String insufficientFunds;
+  public String successful = "Successful";
+  public String insufficientFunds = "Insufficient Funds";
 
 
   public String customer(
@@ -244,6 +242,7 @@ public class PaystackResponse {
           boolean success,
           String gatewayResponse
   ) {
+    String status = success ? "success" : "failed";
 
     String data = acceptRequest ? "  \"data\": {\n" +
                                   "    \"amount\": " +
@@ -252,7 +251,7 @@ public class PaystackResponse {
                                   "    \"currency\": \"NGN\",\n" +
                                   "    \"transaction_date\": \"2017-03-31T12:05:51.000Z\",\n" +
                                   "    \"status\": \"" +
-                                  success +
+                                  status +
                                   "\",\n" +
                                   "    \"reference\": \"action-33b100fa3a77f8445226\",\n" +
                                   "    \"domain\": \"test\",\n" +

@@ -45,7 +45,11 @@ public class MockController {
 
         int atomic = atomicInteger.incrementAndGet();
 
-        if (atomic == 2) {
+        if (atomic == 1) {
+          System.out.println("-----------" + atomicInteger + "-----------");
+
+          atomicInteger.compareAndSet(1, 0);
+
           return paystackResponse.chargeFail();
         }
 
@@ -105,11 +109,13 @@ public class MockController {
           String request,
           String uri
   ) {
-    logger.info("Processing uri: " + uri + " request: " + request);
+    logger.debug("Processing uri: " + uri + " request: " + request);
+    System.out.println("Processing uri: " + uri + " request: " + request);
 
     String response = responseSupplier.get();
 
     logger.debug(response);
+    System.out.println(response);
 
     return response;
   }
