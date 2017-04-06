@@ -3,7 +3,7 @@ package eu.taxify.mock.controller;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import eu.taxify.mock.paystack.ChargeRequest;
-import eu.taxify.mock.paystack.PaystackResponse;
+import eu.taxify.mock.paystack.PaystackResponseHandler;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -15,19 +15,19 @@ import java.util.function.Supplier;
 @RestController
 public class MockController {
 
-  public static final String CUSTOMER_URI           = "/customer";
+  public static final String CUSTOMER_URI = "/customer";
   public static final String TRANSACTION_VERIFY_URI = "/transaction/verify";
   public static final String
                              TRANSACTION_CHARGE_AUTHORIZATION_URI
-                                                    = "/transaction/charge_authorization";
-  private PaystackResponse paystackResponse;
-  private Logger           logger;
+          = "/transaction/charge_authorization";
+  private PaystackResponseHandler paystackResponse;
+  private Logger                  logger;
 
   private AtomicInteger atomicInteger = new AtomicInteger();
 
   @Autowired
   public MockController(
-          PaystackResponse paystackResponse,
+          PaystackResponseHandler paystackResponse,
           Logger logger
   ) {
     this.paystackResponse = paystackResponse;
@@ -38,20 +38,12 @@ public class MockController {
   public String mockCharge(@RequestBody ChargeRequest chargeRequest)
           throws InterruptedException, JsonProcessingException {
 
+//    Thread.sleep(10000);
+
     String jsonRequest = new ObjectMapper().writeValueAsString(chargeRequest);
 
     return sendResponse(() -> {
       if ("NGN".equals(chargeRequest.getCurrency())) {
-
-        int atomic = atomicInteger.incrementAndGet();
-
-        if (atomic == 1) {
-          System.out.println("-----------" + atomicInteger + "-----------");
-
-          atomicInteger.compareAndSet(1, 0);
-
-          return paystackResponse.chargeFail();
-        }
 
         return paystackResponse.charge(
                 chargeRequest.getAuthorizationCode(),
@@ -74,19 +66,14 @@ public class MockController {
                      reference +
                      " }";
 
-//    Thread.sleep(10000);
+    Thread.sleep(100000);
 
-    return sendResponse(() -> {
-      if (Objects.equals(reference, paystackResponse.VALID_REFERENCE)) {
-        return paystackResponse.verifySuccessful(paystackResponse.VALID_REFERENCE);
-      } else {
-        return paystackResponse.verify(
-                reference,
-                false,
-                paystackResponse.insufficientFunds
-        );
-      }
-    }, request, TRANSACTION_VERIFY_URI);
+    return sendResponse(
+//            () -> paystackResponse.verify(reference, false, "Insufficient Funds"),
+            () -> paystackResponse.verifySuccessful(reference),
+            request,
+            TRANSACTION_VERIFY_URI
+    );
   }
 
   @GetMapping(CUSTOMER_URI + "/{id}")

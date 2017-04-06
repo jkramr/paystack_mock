@@ -1,6 +1,6 @@
 package eu.taxify.mock.config;
 
-import eu.taxify.mock.paystack.PaystackResponse;
+import eu.taxify.mock.paystack.PaystackResponseHandler;
 import org.springframework.boot.SpringBootConfiguration;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
@@ -12,7 +12,7 @@ import org.springframework.context.annotation.PropertySource;
 public class Paystack {
 
   @Bean
-  PaystackResponse paystackResponse() {
-    return new PaystackResponse();
+  PaystackResponseHandler paystackResponse() {
+    return new PaystackResponseHandler();
   }
 }

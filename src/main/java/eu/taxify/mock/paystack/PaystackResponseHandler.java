@@ -1,27 +1,13 @@
 package eu.taxify.mock.paystack;
 
+import eu.taxify.mock.paystack.response.Authorization;
+import eu.taxify.mock.paystack.response.Customer;
+import eu.taxify.mock.paystack.response.VerifyPaystackResponse;
 import lombok.Data;
 
 @Data
-public class PaystackResponse {
+public class PaystackResponseHandler {
 
-  public static final String  EXAMPLE_AUTHORIZATIONS =
-          "    \"authorizations\": [\n" +
-          "      {\n" +
-          "        \"authorization_code\": \"AUTH_xnf39jtr\",\n" +
-          "        \"bin\": \"412345\",\n" +
-          "        \"last4\": \"1381\",\n" +
-          "        \"exp_month\": \"02\",\n" +
-          "        \"exp_year\": \"2020\",\n" +
-          "        \"channel\": \"card\",\n" +
-          "        \"card_type\": \"visa\",\n" +
-          "        \"bank\": \"TEST BANK\",\n" +
-          "        \"country_code\": \"NG\",\n" +
-          "        \"brand\": \"visa\",\n" +
-          "        \"reusable\": true,\n" +
-          "        \"signature\": \"SIG_y8PqDaob8DcMVqt9vHJj\"\n" +
-          "      }\n" +
-          "    ],\n";
   public static final String
                               GENERATED_EMAIL
                                                      = "ce432e7f8d6fde4@payment.taxify.eu";
@@ -32,61 +18,6 @@ public class PaystackResponse {
                                                      = "Verification successful";
   public final        String  VERIFICATION_UNSUCCESSFUL
                                                      = "Verification unsuccessful";
-  public final        String  EXAMPLE_AUTHORIZATION  =
-          "      \"authorization\":{  \n" +
-          "         \"authorization_code\":\"AUTH_8dfhjjdt\",\n" +
-          "         \"card_type\":\"visa\",\n" +
-          "         \"last4\":\"1381\",\n" +
-          "         \"exp_month\":\"08\",\n" +
-          "         \"exp_year\":\"2018\",\n" +
-          "         \"bin\":\"412345\",\n" +
-          "         \"bank\":\"TEST BANK\",\n" +
-          "         \"channel\":\"card\",\n" +
-          "         \"reusable\":true,\n" +
-          "         \"country_code\":\"NG\",\n" +
-          "         \"signature\":\"SIG_7UkxQpDbSm3jQNKdo19uYaAFj8Teqx\"\n" +
-          "      },\n";
-  public final        String  CUSTOMER               =
-          "      \"customer\":{  \n" +
-          "         \"id\":" + VALID_CUSTOMER_ID + ",\n" +
-          "         \"customer_code\":\"CUS_hdhye17yj8qd2tx\",\n" +
-          "         \"first_name\":\"BoJack\",\n" +
-          "         \"last_name\":\"Horseman\",\n" +
-          "         \"email\":\"bojack@horseman.com\"\n" +
-          "      },\n";
-  public final        String  LOG
-                                                     = "      \"log\":{  \n" +
-                                                       "         \"time_spent\":9,\n" +
-                                                       "         \"attempts\":1,\n" +
-                                                       "         \"authentication\":null,\n" +
-                                                       "         \"errors\":0,\n" +
-                                                       "         \"success\":true,\n" +
-                                                       "         \"mobile\":false,\n" +
-                                                       "         \"input\":[ ],\n" +
-                                                       "         \"channel\":null,\n" +
-                                                       "         \"history\":[  \n" +
-                                                       "            {  \n" +
-                                                       "               \"type\":\"input\",\n" +
-                                                       "               \"message\":\"Filled these fields: card number, card expiry, card cvv\",\n" +
-                                                       "               \"time\":7\n" +
-                                                       "            },\n" +
-                                                       "            {  \n" +
-                                                       "               \"type\":\"action\",\n" +
-                                                       "               \"message\":\"Attempted to pay\",\n" +
-                                                       "               \"time\":7\n" +
-                                                       "            },\n" +
-                                                       "            {  \n" +
-                                                       "               \"type\":\"success\",\n" +
-                                                       "               \"message\":\"Successfully paid\",\n" +
-                                                       "               \"time\":8\n" +
-                                                       "            },\n" +
-                                                       "            {  \n" +
-                                                       "               \"type\":\"close\",\n" +
-                                                       "               \"message\":\"Page closed\",\n" +
-                                                       "               \"time\":9\n" +
-                                                       "            }\n" +
-                                                       "         ]\n" +
-                                                       "      },\n";
 
   public final String EXAMPLE_TRANSACTIONS = "    \"transactions\": [\n" +
                                              "      {\n" +
@@ -103,33 +34,7 @@ public class PaystackResponse {
                                              "        \"currency\": \"NGN\",\n" +
                                              "        \"ip_address\": \"90.190.180.5\",\n" +
                                              "        \"metadata\": \"\",\n" +
-                                             "        \"log\": {\n" +
-                                             "          \"time_spent\": 27,\n" +
-                                             "          \"attempts\": 1,\n" +
-                                             "          \"authentication\": null,\n" +
-                                             "          \"errors\": 0,\n" +
-                                             "          \"success\": true,\n" +
-                                             "          \"mobile\": false,\n" +
-                                             "          \"input\": [],\n" +
-                                             "          \"channel\": null,\n" +
-                                             "          \"history\": [\n" +
-                                             "            {\n" +
-                                             "              \"type\": \"input\",\n" +
-                                             "              \"message\": \"Filled these fields: card expiry, card cvv\",\n" +
-                                             "              \"time\": 26\n" +
-                                             "            },\n" +
-                                             "            {\n" +
-                                             "              \"type\": \"action\",\n" +
-                                             "              \"message\": \"Attempted to pay\",\n" +
-                                             "              \"time\": 26\n" +
-                                             "            },\n" +
-                                             "            {\n" +
-                                             "              \"type\": \"success\",\n" +
-                                             "              \"message\": \"Successfully paid\",\n" +
-                                             "              \"time\": 27\n" +
-                                             "            }\n" +
-                                             "          ]\n" +
-                                             "        },\n" +
+                                             "        \"log\": {},\n" +
                                              "        \"fees\": 5000,\n" +
                                              "        \"fees_split\": null,\n" +
                                              "        \"customer\": {},\n" +
@@ -140,8 +45,8 @@ public class PaystackResponse {
                                              "        \"createdAt\": \"2017-02-06T16:16:47.000Z\"\n" +
                                              "      }\n" +
                                              "    ],\n";
-  public String successful = "Successful";
-  public String insufficientFunds = "Insufficient Funds";
+  public       String successful           = "Successful";
+  public       String insufficientFunds    = "Insufficient Funds";
 
 
   public String customer(
@@ -154,7 +59,7 @@ public class PaystackResponse {
     String data = success ? "  \"data\": {\n" +
                             EXAMPLE_TRANSACTIONS +
                             "    \"subscriptions\": [],\n" +
-                            EXAMPLE_AUTHORIZATIONS +
+                            Authorization.EXAMPLE_AUTHORIZATIONS +
                             "    \"first_name\": \"\",\n" +
                             "    \"last_name\": \"\",\n" +
                             "    \"email\": \"" + GENERATED_EMAIL + "\",\n" +
@@ -194,34 +99,33 @@ public class PaystackResponse {
     String message = success ? VERIFICATION_SUCCESSFUL
                              : VERIFICATION_UNSUCCESSFUL;
 
-    String data = success ? "   \"data\":{  \n" +
-                            "      \"amount\":27000,\n" +
-                            "      \"currency\":\"NGN\",\n" +
-                            "      \"transaction_date\":\"2016-10-01T11:03:09.000Z\",\n" +
-                            "      \"status\":\"" +
-                            status +
-                            "\",\n" +
-                            "      \"reference\":\"" +
-                            reference +
-                            "\",\n" +
-                            "      \"domain\":\"test\",\n" +
-                            "      \"metadata\":0,\n" +
-                            "      \"gateway_response\":\"" +
-                            gatewayResponse +
-                            "\",\n" +
-                            "      \"message\":null,\n" +
-                            "      \"channel\":\"card\",\n" +
-                            "      \"ip_address\":\"41.1.25.1\",\n" +
-                            LOG +
-                            "      \"fees\":null,\n" +
-                            EXAMPLE_AUTHORIZATION +
-                            CUSTOMER +
-                            "      \"plan\":\"PLN_0as2m9n02cl0kp6\"\n" +
-                            "   }\n"
-                          : "";
+    String data = "   \"data\":{  \n" +
+                  "      \"amount\":27000,\n" +
+                  "      \"currency\":\"NGN\",\n" +
+                  "      \"transaction_date\":\"2016-10-01T11:03:09.000Z\",\n" +
+                  "      \"status\":\"" +
+                  status +
+                  "\",\n" +
+                  "      \"reference\":\"" +
+                  reference +
+                  "\",\n" +
+                  "      \"domain\":\"test\",\n" +
+                  "      \"metadata\":0,\n" +
+                  "      \"gateway_response\":\"" +
+                  gatewayResponse +
+                  "\",\n" +
+                  "      \"message\":null,\n" +
+                  "      \"channel\":\"card\",\n" +
+                  "      \"ip_address\":\"41.1.25.1\",\n" +
+                  "      \"log\":{},\n" +
+                  "      \"fees\":null,\n" +
+                  Authorization.EXAMPLE_AUTHORIZATION +
+                  Customer.EXAMPLE_CUSTOMER +
+                  "      \"plan\":\"PLN_0as2m9n02cl0kp6\"\n" +
+                  "   }\n";
 
     return "{  \n" +
-           "   \"status\":" + success + ",\n" +
+           "   \"status\":" + true + ",\n" +
            "   \"message\":\"" + message + "\",\n" +
            data +
            "}";
