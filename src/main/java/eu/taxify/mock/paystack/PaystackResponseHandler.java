@@ -2,7 +2,6 @@ package eu.taxify.mock.paystack;
 
 import eu.taxify.mock.paystack.response.Authorization;
 import eu.taxify.mock.paystack.response.Customer;
-import eu.taxify.mock.paystack.response.VerifyPaystackResponse;
 import lombok.Data;
 
 @Data

@@ -66,7 +66,7 @@ public class MockController {
                      reference +
                      " }";
 
-    Thread.sleep(100000);
+//    Thread.sleep(100000);
 
     return sendResponse(
 //            () -> paystackResponse.verify(reference, false, "Insufficient Funds"),
