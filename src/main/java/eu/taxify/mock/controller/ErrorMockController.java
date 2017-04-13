@@ -41,11 +41,11 @@ public class ErrorMockController
   }
 
   private String parseRequest(CreatePaymentMethodRequest request) {
-    return null;
+    return "{ code: " + request.getPaymentMethodData().getFirstName() + "}";
   }
 
-  private String parseRequest(CreateOrderRequest jsonRequest) {
-    return null;
+  private String parseRequest(CreateOrderRequest request) {
+    return "{ code: " + request.getExtraInfo() + "}";
   }
 
   @PostMapping(CLIENT_CREATE_ORDER)
