@@ -13,7 +13,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Supplier;
 
 @RestController
-public class MockController {
+public class MockController extends AbstractController {
 
   public static final String CUSTOMER_URI = "/customer";
   public static final String TRANSACTION_VERIFY_URI = "/transaction/verify";
@@ -21,7 +21,6 @@ public class MockController {
                              TRANSACTION_CHARGE_AUTHORIZATION_URI
           = "/transaction/charge_authorization";
   private PaystackResponseHandler paystackResponse;
-  private Logger                  logger;
 
   private AtomicInteger atomicInteger = new AtomicInteger();
 
@@ -30,8 +29,8 @@ public class MockController {
           PaystackResponseHandler paystackResponse,
           Logger logger
   ) {
+    super(logger);
     this.paystackResponse = paystackResponse;
-    this.logger = logger;
   }
 
   @PostMapping(TRANSACTION_CHARGE_AUTHORIZATION_URI)
@@ -89,22 +88,6 @@ public class MockController {
         return paystackResponse.customer(id, false);
       }
     }, request, CUSTOMER_URI);
-  }
-
-  private String sendResponse(
-          Supplier<String> responseSupplier,
-          String request,
-          String uri
-  ) {
-    logger.debug("Processing uri: " + uri + " request: " + request);
-    System.out.println("Processing uri: " + uri + " request: " + request);
-
-    String response = responseSupplier.get();
-
-    logger.debug(response);
-    System.out.println(response);
-
-    return response;
   }
 
 }
