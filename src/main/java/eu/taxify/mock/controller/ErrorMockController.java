@@ -54,15 +54,15 @@ public class ErrorMockController
   }
 
   private String parseRequest(CreatePaymentMethodRequest request) {
-    return "{ code: " + request.getPaymentMethodData().getFirstName() + "}";
+    return "{ code: " + request.getPaymentMethodData().getFirstName() + " }";
   }
 
   private String parseRequest(CreateOrderRequest request) {
-    return "{ code: " + request.getExtraInfo() + "}";
+    return "{ code: " + request.getExtraInfo() + " }";
   }
 
   private String parseRequest(String orderId) {
-    return "{ code: " + orderId + "}";
+    return "{ code: 0, client_error: " + orderId + " }";
   }
 
   @PostMapping(CLIENT_CREATE_ORDER)
